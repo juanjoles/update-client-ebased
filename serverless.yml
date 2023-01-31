@@ -1,0 +1,23 @@
+
+service: juanjolescano-updateclient-integrador
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: arn:aws:dynamodb:us-east-1:450865910417:table/juanjoselescano-clients
+
+
+functions:
+  updateClient:
+    handler: updateClient.hello
+    description: 'An API that update clients.'
+    events:
+      - http:
+          path: clients/{id}
+          method: PUT
