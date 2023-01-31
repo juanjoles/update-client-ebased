@@ -1,6 +1,7 @@
 const {InputValidation} = require('ebased/schema/inputValidation');
 
 class UpdateClient extends InputValidation {
+    
     constructor(payload, meta) {
         super({
            type:'CLIENT.MODIFIED',
