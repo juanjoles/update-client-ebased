@@ -11,6 +11,10 @@ provider:
       Action:
         - dynamodb:PutItem
       Resource: arn:aws:dynamodb:us-east-1:450865910417:table/juanjoselescano-clients
+    - Effect: Allow
+      Action: 
+        - SNS:Publish
+      Resource: arn:aws:sns:us-east-1:450865910417:juanjoselescano-createdClient
 
 
 functions:

@@ -1,24 +1,29 @@
 const { UpdateClient } = require('../schema/input/updateClient');
 const { getClientByDni } = require('../service/getClient');
-const {updateGift} = require('../helper/updateGift');
-const { updateCard } = require('../helper/updateCard');
-const { updateClient } = require('../service/updateClient');
+const { updateClientEvent, updateClient } = require('../service/updateClient');
+const { emitClientUpdate } = require('../service/emitClientUpdate');
 
 
 module.exports = async (commandPayload, commandMeta) => {
     new UpdateClient(commandPayload, commandMeta); 
     const {dni, name, lastname, birth} = commandPayload;
-    const clientBd = getClientByDni(dni);
-    const newGift = updateGift(birth);
-    //const dbParams = updateCard(birth);
-    const clientUpdate = {
+    const clientDb = getClientByDni(dni);
+    if(clientDb.birth !== birth){
+        const updateCardandGift = {
+            dni,
+            name,
+            lastname,
+            birth,
+        }
+       await emitClientUpdate(new updateClientEvent(updateCardandGift, commandMeta))
+    }
+    const newClient = {
         dni,
         name,
         lastname,
-        birth:clientBd.birth,
-        newGift     
+        birth,
     }
-    const result = {clientUpdate}
-    await updateClient(result)
-    return {status: 200, body: result};
+    await updateClient(newClient);
+
+    return {status: 200, body: newClient};
 };

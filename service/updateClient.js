@@ -8,12 +8,12 @@ const updateClient = async (result) => {
         Key:{
             pk:result.dni
         },
-        UpdateExpression:'set name = :a, lastname = :b, birth = :c, gift = :d',
+        UpdateExpression:'set dni = :x, name = :a, lastname = :b, birth = :c',
         ExpresionAttributeValues:{
+            ':x' :result.dni,
             ':a' :result.name,
             ':b':result.lastname,
             ':c':result.birth,
-            ':d':result.newGift
         },
     };
     await dynamo.updateItem(params)
